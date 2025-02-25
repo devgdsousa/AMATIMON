@@ -2,6 +2,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import logo from '../assets/logo.png'
+import { Button} from '../components/UI';
 
 const CadastroForm: React.FC = () => {
   const [nome, setNome] = useState('');
@@ -26,9 +28,10 @@ const CadastroForm: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col justify-center items-center">
+    <div className="min-h-screen flex flex-col justify-center items-center bg-[url('src/assets/bg.jpg')] bg-cover bg-center p-6 backdrop-blur-md bg-transparent">
       <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 w-full max-w-lg">
-        <h2 className="text-2xl font-bold mb-6 text-center">Novo Cadastro</h2>
+        <img src={logo} alt="" />
+        <h2 className="text-2xl font-bold mt-6 mb-5 text-center">Novo Cadastro</h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label htmlFor="nome" className="block text-gray-700 text-sm font-bold mb-2">
@@ -72,13 +75,13 @@ const CadastroForm: React.FC = () => {
               required
             />
           </div>
-          <div className="flex items-center justify-between">
-            <button
-              type="submit"
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-            >
-              Criar Cadastro
-            </button>
+          <div className="flex items-center justify-center">
+          <Button
+          type="submit"
+          className={`w-full py-3 rounded-lg text-white hover:bg-orange-400 focus:outline-none focus:ring-2 focus:ring-blue-500`}
+        >
+          Cadastrar
+        </Button>
           </div>
         </form>
       </div>
