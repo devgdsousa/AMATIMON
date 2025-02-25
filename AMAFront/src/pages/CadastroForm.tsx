@@ -29,7 +29,7 @@ const CadastroForm: React.FC = () => {
 
   return (
     <div className="min-h-screen flex flex-col justify-center items-center bg-[url('src/assets/bg.jpg')] bg-cover bg-center p-6 backdrop-blur-md bg-transparent">
-      <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 w-full max-w-lg">
+      <div className="bg-[#dcd4cc] shadow-md rounded px-8 pt-6 pb-8 mb-4 w-full max-w-lg">
         <img src={logo} alt="" />
         <h2 className="text-2xl font-bold mt-6 mb-5 text-center">Novo Cadastro</h2>
         <form onSubmit={handleSubmit}>
