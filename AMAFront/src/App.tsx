@@ -4,8 +4,10 @@ import { AuthProvider } from './context/AuthContext';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import CadastroForm from './pages/CadastroForm';
+import CadastroTEAForm from './pages/CadastroTEAForm';
 import ProtectedRoute from './components/ProtectedRoute';
 import PublicRoute from './components/PublicRoute';
+import InfoPage from './pages/InfoPage';
 
 
 const App: React.FC = () => {
@@ -22,6 +24,23 @@ const App: React.FC = () => {
               </ProtectedRoute>
             }
           />
+          <Route
+            path="/cadastroTEA"
+            element={
+              <ProtectedRoute>
+                <CadastroTEAForm />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/infopage"
+            element={
+              <ProtectedRoute>
+                <InfoPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="/info/:id" element={<InfoPage />} />
           <Route
             path="/cadastro"
             element={
