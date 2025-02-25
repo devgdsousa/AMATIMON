@@ -30,7 +30,7 @@ const Login: React.FC = () => {
     <div className="flex items-center justify-center min-h-screen bg-[url('src/assets/bg.jpg')] bg-cover bg-center p-6">
     <div className="w-full max-w-md p-8 bg-transparent shadow-lg backdrop-blur-md rounded-lg">
       <img src={logo} className="mb-6"/>
-      <h1 className="text-2xl font-semibold mb-6 text-center text-gray-800">Bem vindo, ao Sistema AMA</h1>
+      <h1 className="text-2xl font-semibold mb-6 text-center text-gray-800">Bem vindo ao Sistema AMA</h1>
       <form onSubmit={handleSubmit} className="space-y-6">
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">E-mail</label>
