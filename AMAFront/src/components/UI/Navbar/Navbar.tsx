@@ -14,10 +14,6 @@ const handleLogout = () => {
     <nav className="container mx-auto h-20 sticky top-0 glass__bg px-4">
       <div className="flex justify-between items-center h-full">
         <img  src={logo} className="w-30"/>
-        <Button onClick={handleLogout} className="text-base bg-gray-900 hover:bg-orange-400">
-            Fazer Cadastro
-        </Button>
-
         <Button onClick={handleLogout} className="text-base bg-red-700">
             Sair
         </Button>

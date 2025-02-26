@@ -1,4 +1,3 @@
-// src/pages/CadastroTEAForm.tsx
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -7,31 +6,34 @@ import { Button } from '../components/UI';
 
 const CadastroTEAForm: React.FC = () => {
   const [formData, setFormData] = useState({
-    nomePortadorTEA: '',
-    numeroRG: '',
-    dataNascimento: '',
-    foto: '',
-    nomeMae: '',
-    nomePai: '',
+    nome: '',
+    data_nascimento: '',
     cpf: '',
-    contato1: '',
-    contato2: '',
-    nomeInstituicao: '',
-    nivelEscolaridade: '',
-    enderecoInstituicao: '',
-    acompanhamentoEspecializado: '',
-    rendaFamiliar: '',
-    numeroFamiliares: '',
-    situacaoResidencia: '',
-    beneficioSocial: '',
+    responsaveis: '',
+    contatos: '',
+
     diagnostico: '',
-    tratamento: '',
-    dataInicioTratamento: '',
-    localTratamento: '',
-    medicacao: '',
-    dataInicioMedicacao: '',
-    laudo: '',
-    observacoes: ''
+    cid: '',
+    medicacoes: '',
+    tratamentos: '',
+    local_atendimento: '',
+
+    casa_situacao: '',
+    pessoas_residencia: '',
+    recebe_beneficio: '',
+    renda_bruta_familiar: '',
+
+    instituicao_ensino: '',
+    acompanhamento_especializado: '',
+    endereco_escola: '',
+    nivel_escolaridade: '',
+   
+    observacoes: '',
+
+    foto: '',
+    documento: '',
+    documentoResponsaveis:'',
+    laudo:'',
   });
 
   const navigate = useNavigate();
@@ -52,21 +54,38 @@ const CadastroTEAForm: React.FC = () => {
     try {
       const token = localStorage.getItem('token');
       const formDataToSend = new FormData();
+  
+      // Adicionando cada campo ao FormData
       Object.entries(formData).forEach(([key, value]) => {
-        formDataToSend.append(key, value);
+        if (value && typeof value === 'object' && 'name' in value) {
+          // Verifica se o valor é um arquivo
+          formDataToSend.append(key, value as Blob);
+        } else {
+          formDataToSend.append(key, String(value));
+        }
       });
+  
       const response = await axios.post(
         'http://localhost:3333/cadastro',
         formDataToSend,
-        { headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'multipart/form-data' } }
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'multipart/form-data',
+          },
+        }
       );
-      console.log('Cadastro criado', response.data);
+  
+      console.log('Cadastro criado com sucesso:', response.data);
+      alert('Cadastro realizado com sucesso!');
       navigate('/dashboard');
     } catch (error) {
-      console.error('Erro ao criar cadastro', error);
+      console.error('Erro ao criar cadastro:', error);
+      alert('Erro ao realizar cadastro. Verifique os dados e tente novamente.');
     }
   };
-
+  
+  
   return (
     <div className="min-h-screen flex flex-col justify-center items-center bg-[url('src/assets/bg.jpg')] bg-cover bg-center p-6 backdrop-blur-md bg-transparent">
       <div className="bg-[#dcd4cc] shadow-md rounded-lg px-8 pt-6 pb-8 mb-4 w-full max-w-2xl">
@@ -79,13 +98,13 @@ const CadastroTEAForm: React.FC = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label htmlFor="nomePortadorTEA" className="block text-gray-700 text-sm font-bold mb-2">
-                  Nome do Portador TEA
+                  Nome completo
                 </label>
                 <input
-                  id="nomePortadorTEA"
+                  id="nome"
                   type="text"
-                  name="nomePortadorTEA"
-                  value={formData.nomePortadorTEA}
+                  name="nome"
+                  value={formData.nome}
                   onChange={handleChange}
                   placeholder="Digite o nome"
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -93,16 +112,14 @@ const CadastroTEAForm: React.FC = () => {
                 />
               </div>
               <div>
-                <label htmlFor="numeroRG" className="block text-gray-700 text-sm font-bold mb-2">
-                  Nº RG (caso possua)
+                <label htmlFor="laudo" className="block text-gray-700 text-sm font-bold mb-2">
+                  Anexar Documento
                 </label>
                 <input
-                  id="numeroRG"
-                  type="text"
-                  name="numeroRG"
-                  value={formData.numeroRG}
-                  onChange={handleChange}
-                  placeholder="Digite o número"
+                  id="documento"
+                  type="file"
+                  name="documento"
+                  onChange={handleFileChange}
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 />
               </div>
@@ -111,10 +128,10 @@ const CadastroTEAForm: React.FC = () => {
                   Data de Nascimento
                 </label>
                 <input
-                  id="dataNascimento"
+                  id="data_nascimento"
                   type="date"
-                  name="dataNascimento"
-                  value={formData.dataNascimento}
+                  name="data_nascimento"
+                  value={formData.data_nascimento}
                   onChange={handleChange}
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 />
@@ -133,27 +150,13 @@ const CadastroTEAForm: React.FC = () => {
               </div>
               <div>
                 <label htmlFor="nomeMae" className="block text-gray-700 text-sm font-bold mb-2">
-                  Nome da Mãe
+                  Nome do Responsavel
                 </label>
                 <input
-                  id="nomeMae"
+                  id="responsaveis"
                   type="text"
-                  name="nomeMae"
-                  value={formData.nomeMae}
-                  onChange={handleChange}
-                  placeholder="Digite o nome completo"
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                />
-              </div>
-              <div>
-                <label htmlFor="nomePai" className="block text-gray-700 text-sm font-bold mb-2">
-                  Nome do Pai
-                </label>
-                <input
-                  id="nomePai"
-                  type="text"
-                  name="nomePai"
-                  value={formData.nomePai}
+                  name="responsaveis"
+                  value={formData.responsaveis}
                   onChange={handleChange}
                   placeholder="Digite o nome completo"
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -169,35 +172,21 @@ const CadastroTEAForm: React.FC = () => {
                   name="cpf"
                   value={formData.cpf}
                   onChange={handleChange}
-                  placeholder="Digite o número"
+                  placeholder="Digite somente os numeros"
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 />
               </div>
               <div>
                 <label htmlFor="contato1" className="block text-gray-700 text-sm font-bold mb-2">
-                  Contato 1
+                  Contato 
                 </label>
                 <input
-                  id="contato1"
+                  id="contatos"
                   type="text"
-                  name="contato1"
-                  value={formData.contato1}
+                  name="contatos"
+                  value={formData.contatos}
                   onChange={handleChange}
                   placeholder="(99) 98800-4455"
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                />
-              </div>
-              <div>
-                <label htmlFor="contato2" className="block text-gray-700 text-sm font-bold mb-2">
-                  Contato 2
-                </label>
-                <input
-                  id="contato2"
-                  type="text"
-                  name="contato2"
-                  value={formData.contato2}
-                  onChange={handleChange}
-                  placeholder="(86) 98811-0055"
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 />
               </div>
@@ -213,10 +202,10 @@ const CadastroTEAForm: React.FC = () => {
                   Nome da Instituição
                 </label>
                 <input
-                  id="nomeInstituicao"
+                  id="instituicao_ensino"
                   type="text"
-                  name="nomeInstituicao"
-                  value={formData.nomeInstituicao}
+                  name="instituicao_ensino"
+                  value={formData.instituicao_ensino}
                   onChange={handleChange}
                   placeholder="Digite o nome da instituição"
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -227,10 +216,10 @@ const CadastroTEAForm: React.FC = () => {
                   Nível de Escolaridade
                 </label>
                 <input
-                  id="nivelEscolaridade"
+                  id="nivel_escolaridade"
                   type="text"
-                  name="nivelEscolaridade"
-                  value={formData.nivelEscolaridade}
+                  name="nivel_escolaridade"
+                  value={formData.nivel_escolaridade}
                   onChange={handleChange}
                   placeholder="Digite a série cursada"
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -241,10 +230,10 @@ const CadastroTEAForm: React.FC = () => {
                   Endereço da Instituição
                 </label>
                 <input
-                  id="enderecoInstituicao"
+                  id="endereco_escola"
                   type="text"
-                  name="enderecoInstituicao"
-                  value={formData.enderecoInstituicao}
+                  name="endereco_escola"
+                  value={formData.endereco_escola}
                   onChange={handleChange}
                   placeholder="Digite o endereço"
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -255,10 +244,10 @@ const CadastroTEAForm: React.FC = () => {
                   Possui acompanhamento especializado?
                 </label>
                 <input
-                  id="acompanhamentoEspecializado"
+                  id="acompanhamento_especializado"
                   type="text"
-                  name="acompanhamentoEspecializado"
-                  value={formData.acompanhamentoEspecializado}
+                  name="acompanhamento_especializado"
+                  value={formData.acompanhamento_especializado}
                   onChange={handleChange}
                   placeholder="Digite, sim ou não"
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -276,10 +265,10 @@ const CadastroTEAForm: React.FC = () => {
                   Renda Bruta Familiar
                 </label>
                 <input
-                  id="rendaFamiliar"
+                  id="renda_bruta_familiar"
                   type="text"
-                  name="rendaFamiliar"
-                  value={formData.rendaFamiliar}
+                  name="renda_bruta_familiar"
+                  value={formData.renda_bruta_familiar}
                   onChange={handleChange}
                   placeholder="Digite a renda familiar"
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -290,10 +279,10 @@ const CadastroTEAForm: React.FC = () => {
                   Quantas pessoas vivem na Residência?
                 </label>
                 <input
-                  id="numeroFamiliares"
+                  id="pessoas_residencia"
                   type="text"
-                  name="numeroFamiliares"
-                  value={formData.numeroFamiliares}
+                  name="pessoas_residencia"
+                  value={formData.pessoas_residencia}
                   onChange={handleChange}
                   placeholder="Digite o número de familiares"
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -304,24 +293,24 @@ const CadastroTEAForm: React.FC = () => {
                   Casa Própria ou Alugada?
                 </label>
                 <input
-                  id="situacaoResidencia"
+                  id="casa_situacao"
                   type="text"
-                  name="situacaoResidencia"
-                  value={formData.situacaoResidencia}
+                  name="casa_situacao"
+                  value={formData.casa_situacao}
                   onChange={handleChange}
                   placeholder="Digite a situação da residência"
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 />
               </div>
               <div>
-                <label htmlFor="beneficioSocial" className="block text-gray-700 text-sm font-bold mb-2">
+                <label htmlFor="recebe_beneficio" className="block text-gray-700 text-sm font-bold mb-2">
                   Recebe algum benefício social? Se sim, qual?
                 </label>
                 <input
-                  id="beneficioSocial"
+                  id="recebe_beneficio"
                   type="text"
-                  name="beneficioSocial"
-                  value={formData.beneficioSocial}
+                  name="recebe_beneficio"
+                  value={formData.recebe_beneficio}
                   onChange={handleChange}
                   placeholder="Digite o benefício recebido"
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -350,42 +339,43 @@ const CadastroTEAForm: React.FC = () => {
               </div>
               <div>
                 <label htmlFor="tratamento" className="block text-gray-700 text-sm font-bold mb-2">
-                  Tratamentos
+                  Tratamento
                 </label>
                 <input
-                  id="tratamento"
+                  id="tratamentos"
                   type="text"
-                  name="tratamento"
-                  value={formData.tratamento}
+                  name="tratamentos"
+                  value={formData.tratamentos}
                   onChange={handleChange}
                   placeholder="Digite o tratamento"
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 />
               </div>
               <div>
-                <label htmlFor="dataInicioTratamento" className="block text-gray-700 text-sm font-bold mb-2">
-                  Data Início Tratamento
+                <label htmlFor="localTratamento" className="block text-gray-700 text-sm font-bold mb-2">
+                  Local onde é Atendido
                 </label>
                 <input
-                  id="dataInicioTratamento"
-                  type="date"
-                  name="dataInicioTratamento"
-                  value={formData.dataInicioTratamento}
+                  id="local_atendimento"
+                  type="text"
+                  name="local_atendimento"
+                  value={formData.local_atendimento}
                   onChange={handleChange}
+                  placeholder="Digite o nome da clínica"
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 />
               </div>
               <div>
-                <label htmlFor="localTratamento" className="block text-gray-700 text-sm font-bold mb-2">
-                  Local onde é Tratado
+                <label htmlFor="cid" className="block text-gray-700 text-sm font-bold mb-2">
+                  C I D
                 </label>
                 <input
-                  id="localTratamento"
+                  id="cid"
                   type="text"
-                  name="localTratamento"
-                  value={formData.localTratamento}
+                  name="cid"
+                  value={formData.cid}
                   onChange={handleChange}
-                  placeholder="Digite o nome da clínica"
+                  placeholder="Digite o cid"
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 />
               </div>
@@ -394,25 +384,12 @@ const CadastroTEAForm: React.FC = () => {
                   Medicações
                 </label>
                 <input
-                  id="medicacao"
+                  id="medicacoes"
                   type="text"
-                  name="medicacao"
-                  value={formData.medicacao}
+                  name="medicacoes"
+                  value={formData.medicacoes}
                   onChange={handleChange}
                   placeholder="Digite a medicação"
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                />
-              </div>
-              <div>
-                <label htmlFor="dataInicioMedicacao" className="block text-gray-700 text-sm font-bold mb-2">
-                  Data Início da Medicação
-                </label>
-                <input
-                  id="dataInicioMedicacao"
-                  type="date"
-                  name="dataInicioMedicacao"
-                  value={formData.dataInicioMedicacao}
-                  onChange={handleChange}
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 />
               </div>
@@ -436,7 +413,7 @@ const CadastroTEAForm: React.FC = () => {
             <h3 className="text-xl font-semibold mb-4">Observações</h3>
             <div>
               <label htmlFor="observacoes" className="block text-gray-700 text-sm font-bold mb-2">
-                Observações sobre o portador TEA
+                Observações sobre a pessoa com TEA
               </label>
               <textarea
                 id="observacoes"

@@ -3,19 +3,20 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
-import CadastroForm from './pages/CadastroForm';
 import CadastroTEAForm from './pages/CadastroTEAForm';
 import ProtectedRoute from './components/ProtectedRoute';
 import PublicRoute from './components/PublicRoute';
 import InfoPage from './pages/InfoPage';
-
 
 const App: React.FC = () => {
   return (
     <AuthProvider>
       <Router>
         <Routes>
+          {/* Rota pública para Login */}
           <Route path="/login" element={<PublicRoute element={<Login />} restricted />} />
+
+          {/* Rota protegida para Dashboard */}
           <Route
             path="/dashboard"
             element={
@@ -24,6 +25,8 @@ const App: React.FC = () => {
               </ProtectedRoute>
             }
           />
+
+          {/* Rota protegida para Cadastro de TEA */}
           <Route
             path="/cadastroTEA"
             element={
@@ -32,23 +35,18 @@ const App: React.FC = () => {
               </ProtectedRoute>
             }
           />
+
+          {/* Rota protegida para InfoPage (detalhes de cadastro) */}
           <Route
-            path="/infopage"
+            path="/cadastro/:id"
             element={
               <ProtectedRoute>
                 <InfoPage />
               </ProtectedRoute>
             }
           />
-          <Route path="/info/:id" element={<InfoPage />} />
-          <Route
-            path="/cadastro"
-            element={
-              <ProtectedRoute>
-                <CadastroForm />
-              </ProtectedRoute>
-            }
-          />
+
+          {/* Rota padrão redireciona para Login */}
           <Route path="*" element={<PublicRoute element={<Login />} />} />
         </Routes>
       </Router>
