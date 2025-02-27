@@ -45,14 +45,14 @@ const Dashboard: React.FC = () => {
 
   const handleSearch = () => {
     if (filteredCadastros.length > 0) {
-      navigate(`/cadastro/${filteredCadastros[0].id}`);
+      navigate(`/info/${filteredCadastros[0].id}`);
     } else {
       alert('Cadastro não encontrado');
     }
   };
 
   return (
-    <div className="min-h-screen bg-[url('src/assets/bg.jpg')] bg-cover bg-center p-6 backdrop-blur-md bg-transparent">
+    <div className="min-h-screen  bg-[#D1D0BC] p-6 ">
       <Navbar />
 
       <button onClick={() => setMenuOpen(true)} className="text-gray-800 text-2xl absolute left-4 top-4">
@@ -94,7 +94,7 @@ const Dashboard: React.FC = () => {
                 <li
                   key={cadastro.id}
                   className="p-2 hover:bg-gray-300 cursor-pointer"
-                  onClick={() => navigate(`/cadastro/${cadastro.id}`)}
+                  onClick={() => navigate(`/info/${cadastro.id}`)}
                 >
                   {cadastro.nome}
                 </li>

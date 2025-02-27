@@ -1,77 +1,142 @@
-// src/pages/InfoPage.tsx
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { getCadastroById } from '../utils/axios';
 import { Button } from '../components/UI';
-import logo from '../assets/logo.png';
-/* import { useParams } from 'react-router-dom'; */
+
+
+interface Cadastro {
+  id: number;
+  nome: string;
+  dataNascimento: string;
+  responsaveis: string;
+  cpf: string;
+  contatos: string;
+  foto: string;
+  documento: string;
+  laudo: string;
+  diagnostico: string;
+  cid: string;
+  tratamentos: string;
+  medicacoes: string;
+  localAtendimento: string;
+  rendaBrutaFamiliar: number;
+  pessoasResidencia: number;
+  casaSituacao: string;
+  recebeBeneficio: string;
+  instituicaoEnsino: string;
+  enderecoEscola: string;
+  nivelEscolaridade: string;
+  acompanhamentoEspecializado: string;
+  observacoes: string;
+  documentoResponsaveis: string;
+  userId: number;
+  createdAt: string;
+  updatedAt: string;
+}
 
 const InfoPage: React.FC = () => {
-  const navigate = useNavigate();
-  {/*const { id } = useParams<{ id: string }>();*/}
-  {/*axios.get(`http://localhost:3333/cadastro/${id}`)*/}
+  const { id } = useParams<{ id: string }>();
+  const [dadosCadastrados, setDadosCadastrados] = useState<Cadastro | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string>('');
 
-  const dadosCadastrados = {
-    diagnosticos: 'Autismo',
-    medicacoes: 'Risperidona',
-    tratamento: 'Terapia comportamental',
-    clinica: 'Clínica Esperança',
-    nomeInstituicao: 'Escola Municipal',
-    enderecoInstituicao: 'Rua das Flores, 123',
-    nivelEscolaridade: '3ª série',
-    acompanhamentoEspecializado: 'Sim',
-    rendaFamiliar: 'R$ 3.000,00',
-    numeroFamiliares: '4',
-    situacaoResidencia: 'Casa própria',
-    fonteRenda: 'Trabalho formal',
-    beneficioSocial: 'Bolsa Família'
-  };
+  useEffect(() => {
+    const fetchCadastro = async () => {
+      if (id) {
+        try {
+          const data = await getCadastroById(Number(id));
+          setDadosCadastrados(data);
+        } catch (err) {
+          console.error('Erro ao buscar cadastro:', err);
+          setError('Erro ao buscar cadastro.');
+        } finally {
+          setLoading(false);
+        }
+      }
+    };
+    fetchCadastro();
+  }, [id]);
 
   const handleAtualizarCadastro = () => {
-    navigate('/cadastro'); 
+    // Implementar a lógica para atualizar o cadastro
+    alert("Atualizar Cadastro");
   };
 
   const handleRemoverCadastro = () => {
-    console.log('Cadastro removido');
-    navigate('/');
+    // Implementar a lógica para remover o cadastro
+    alert("Remover Cadastro");
   };
 
+  if (loading) {
+    return (
+      <div className="min-h-screen flex flex-col justify-center items-center">
+        <p>Carregando...</p>
+      </div>
+    );
+  }
+
+  if (error || !dadosCadastrados) {
+    return (
+      <div className="min-h-screen flex flex-col justify-center items-center">
+        <p className="text-red-500">{error || 'Nenhum cadastro encontrado.'}</p>
+      </div>
+    );
+  }
+
   return (
-    <div className="min-h-screen flex flex-col justify-center items-center bg-[url('src/assets/bg.jpg')] bg-cover bg-center p-6 backdrop-blur-md bg-transparent">
+    <div className="min-h-screen flex flex-col justify-center items-center bg-[#D1D0BC] p-6 backdrop-blur-md">
       <div className="bg-[#dcd4cc] rounded-lg px-8 pt-6 pb-8 mb-4 w-full max-w-2xl shadow-lg backdrop-blur-md">
-        <img src={logo} alt="Logo" className="mx-auto mb-6" />
+        {dadosCadastrados.foto ? (
+            <img 
+              rel="preload"
+              src={dadosCadastrados.foto} 
+              alt=""  // Remover o nome
+              className="mx-auto mb-6 rounded-full w-32 h-32 object-cover" // Estilo de avatar
+            />
+            ) : (
+            <div className="mx-auto mb-6 text-center text-gray-600">Sem Foto</div>
+              )}
         <h2 className="text-2xl font-bold mb-6 text-center">Informações do Cadastro</h2>
 
-        {/* Dados Médicos */}
-        <div className="mb-6">
-          <h3 className="text-xl font-semibold mb-4">Dados Médicos</h3>
+        <div className="grid grid-cols-2 gap-6 mb-6">
+          {/* Dados Pessoais */}
           <div className="space-y-2">
-            <p><strong>Diagnósticos:</strong> {dadosCadastrados.diagnosticos}</p>
+            <h3 className="text-xl font-semibold mb-4">Dados Pessoais</h3>
+            <p><strong>Nome:</strong> {dadosCadastrados.nome}</p>
+            <p><strong>Data de Nascimento:</strong> {dadosCadastrados.dataNascimento}</p>
+            <p><strong>Responsáveis:</strong> {dadosCadastrados.responsaveis}</p>
+            <p><strong>CPF:</strong> {dadosCadastrados.cpf}</p>
+            <p><strong>Contatos:</strong> {dadosCadastrados.contatos}</p>
+          </div>
+
+          {/* Dados Médicos */}
+          <div className="space-y-2">
+            <h3 className="text-xl font-semibold mb-4">Dados Médicos</h3>
+            <p><strong>Diagnósticos:</strong> {dadosCadastrados.diagnostico}</p>
             <p><strong>Medicações:</strong> {dadosCadastrados.medicacoes}</p>
-            <p><strong>Tratamento:</strong> {dadosCadastrados.tratamento}</p>
-            <p><strong>Clínica/Local:</strong> {dadosCadastrados.clinica}</p>
+            <p><strong>Tratamento:</strong> {dadosCadastrados.tratamentos}</p>
+            <p><strong>Clínica/Local:</strong> {dadosCadastrados.localAtendimento}</p>
           </div>
-        </div>
 
-        {/* Dados Escolares */}
-        <div className="mb-6">
-          <h3 className="text-xl font-semibold mb-4">Dados Escolares</h3>
+          {/* Dados Escolares */}
           <div className="space-y-2">
-            <p><strong>Nome da Instituição:</strong> {dadosCadastrados.nomeInstituicao}</p>
-            <p><strong>Endereço:</strong> {dadosCadastrados.enderecoInstituicao}</p>
+            <h3 className="text-xl font-semibold mb-4">Dados Escolares</h3>
+            <p><strong>Nome da Instituição:</strong> {dadosCadastrados.instituicaoEnsino}</p>
+            <p><strong>Endereço:</strong> {dadosCadastrados.enderecoEscola}</p>
             <p><strong>Nível de Escolaridade:</strong> {dadosCadastrados.nivelEscolaridade}</p>
-            <p><strong>Possui acompanhamento especializado?:</strong> {dadosCadastrados.acompanhamentoEspecializado}</p>
+            <p>
+              <strong>Acompanhamento Especializado:</strong> {dadosCadastrados.acompanhamentoEspecializado}
+            </p>
           </div>
-        </div>
 
-        {/* Dados Financeiros */}
-        <div className="mb-6">
-          <h3 className="text-xl font-semibold mb-4">Dados Financeiros</h3>
+          {/* Dados Financeiros */}
           <div className="space-y-2">
-            <p><strong>Renda Bruta:</strong> {dadosCadastrados.rendaFamiliar}</p>
-            <p><strong>Quantas pessoas vivem na Residência?:</strong> {dadosCadastrados.numeroFamiliares}</p>
-            <p><strong>Casa própria ou alugada?:</strong> {dadosCadastrados.situacaoResidencia}</p>
-            <p><strong>Principal fonte de renda:</strong> {dadosCadastrados.fonteRenda}</p>
-            <p><strong>Recebe algum benefício social? Se sim, qual?:</strong> {dadosCadastrados.beneficioSocial}</p>
+            <h3 className="text-xl font-semibold mb-4">Dados Financeiros</h3>
+            <p><strong>Renda Bruta:</strong> {dadosCadastrados.rendaBrutaFamiliar}</p>
+            <p><strong>Pessoas na Residência:</strong> {dadosCadastrados.pessoasResidencia}</p>
+            <p><strong>Casa própria ou alugada:</strong> {dadosCadastrados.casaSituacao}</p>
+            <p><strong>Benefício Social:</strong> {dadosCadastrados.recebeBeneficio}</p>
+            <p><strong>Fonte de Renda:</strong> {"Não informado"}</p>
           </div>
         </div>
 

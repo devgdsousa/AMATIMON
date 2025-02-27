@@ -1,6 +1,7 @@
 const UsersController = () => import('#controllers/users_controller')
 const CadastrosController = () => import('#controllers/cadastros_controller')
 const SessionController = () => import('#controllers/session_controller')
+const RelatorioController = () => import('#controllers/relatorio_controller')
 
 import router from '@adonisjs/core/services/router'
 import { middleware } from './kernel.js'
@@ -15,5 +16,6 @@ router.resource('user', UsersController).apiOnly()
 router
   .group(() => {
     router.resource('cadastro', CadastrosController).apiOnly()
+    router.get('cadastro/:id/pdf', [RelatorioController, 'generate'])
   })
   .use(middleware.auth())

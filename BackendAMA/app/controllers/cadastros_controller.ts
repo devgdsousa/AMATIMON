@@ -29,7 +29,7 @@ export default class CadastrosController {
         extnames: ['pdf', 'jpg', 'jpeg', 'png'],
       })
 
-      const uploadPath = Application.tmpPath('uploads')
+      const uploadPath = Application.publicPath('uploads')
 
       // Gerar nome único para cada arquivo
       const fotoFileName = foto ? `${Date.now()}_${foto.clientName}` : null

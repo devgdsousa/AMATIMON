@@ -6,7 +6,11 @@ const api = axios.create({
 
 export const getCadastroById = async (id: number) => {
   try {
-    const response = await api.get(`http://localhost:3333/cadastros/${id}`);
+    const token = localStorage.getItem('token');
+  
+    const response = await api.get(`/cadastro/${id}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
     return response.data; 
   } catch (error) {
     console.error('Erro ao buscar cadastro:', error);
@@ -15,5 +19,3 @@ export const getCadastroById = async (id: number) => {
 };
 
 export default api;
-
-

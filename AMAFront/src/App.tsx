@@ -38,7 +38,7 @@ const App: React.FC = () => {
 
           {/* Rota protegida para InfoPage (detalhes de cadastro) */}
           <Route
-            path="/cadastro/:id"
+            path="/info/:id"
             element={
               <ProtectedRoute>
                 <InfoPage />
