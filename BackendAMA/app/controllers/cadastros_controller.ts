@@ -55,11 +55,11 @@ export default class CadastrosController {
       // Criar cadastro com os arquivos
       const cadastro = await user.related('cadastros').create({
         ...data,
-        foto: fotoFileName ? `/uploads/${fotoFileName}` : null,
-        documento: documentoFileName ? `/uploads/${documentoFileName}` : null,
-        laudo: laudoFileName ? `/uploads/${laudoFileName}` : null,
+        foto: fotoFileName ? `uploads/${fotoFileName}` : null,
+        documento: documentoFileName ? `uploads/${documentoFileName}` : null,
+        laudo: laudoFileName ? `uploads/${laudoFileName}` : null,
         documento_responsaveis: documentoResponsaveisFileName
-          ? `/uploads/${documentoResponsaveisFileName}`
+          ? `uploads/${documentoResponsaveisFileName}`
           : null,
       })
 
@@ -110,25 +110,25 @@ export default class CadastrosController {
       if (foto) {
         const fotoFileName = `${Date.now()}_${foto.clientName}`
         await foto.move(uploadPath, { name: fotoFileName })
-        cadastro.foto = `/uploads/${fotoFileName}`
+        cadastro.foto = `uploads/${fotoFileName}`
       }
 
       if (documento) {
         const documentoFileName = `${Date.now()}_${documento.clientName}`
         await documento.move(uploadPath, { name: documentoFileName })
-        cadastro.documento = `/uploads/${documentoFileName}`
+        cadastro.documento = `uploads/${documentoFileName}`
       }
 
       if (laudo) {
         const laudoFileName = `${Date.now()}_${laudo.clientName}`
         await laudo.move(uploadPath, { name: laudoFileName })
-        cadastro.laudo = `/uploads/${laudoFileName}`
+        cadastro.laudo = `uploads/${laudoFileName}`
       }
 
       if (documentoResponsaveis) {
         const documentoResponsaveisFileName = `${Date.now()}_${documentoResponsaveis.clientName}`
         await documentoResponsaveis.move(uploadPath, { name: documentoResponsaveisFileName })
-        cadastro.documento_responsaveis = `/uploads/${documentoResponsaveisFileName}`
+        cadastro.documento_responsaveis = `uploads/${documentoResponsaveisFileName}`
       }
 
       const updatedCadastroData = {

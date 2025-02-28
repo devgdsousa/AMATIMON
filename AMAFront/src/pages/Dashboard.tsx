@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/UI/Navbar/Navbar';
 import { Button } from '../components/UI';
 import { FaSearch, FaBars, FaTimes } from 'react-icons/fa';
+import Notification from '../components/UI/CardNotif/Card';
+
 
 interface Cadastro {
   id: number;
@@ -52,20 +54,19 @@ const Dashboard: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen  bg-[#D1D0BC] p-6 ">
+    <div className="min-h-screen  bg-[url('src/assets/bg.jpg')] bg-center bg-cover p-6 ">
       <Navbar />
-
-      <button onClick={() => setMenuOpen(true)} className="text-gray-800 text-2xl absolute left-4 top-4">
+      <button onClick={() => setMenuOpen(true)} className="text-gray-800 text-2xl absolute right-4 top-4">
         <FaBars />
       </button>
 
       {menuOpen && (
-        <div className="fixed top-0 left-0 w-64 h-full bg-gray-800 shadow-lg p-4 text-white z-50">
+        <div className="fixed top-0 right-0 w-64 h-full bg-gray-800 shadow-lg p-4 text-white z-50">
           <button onClick={() => setMenuOpen(false)} className="text-white text-2xl mb-4">
             <FaTimes />
           </button>
           <ul>
-            <li className="p-2 hover:bg-gray-700 cursor-pointer" onClick={() => navigate('/lista-cadastrados')}>Lista de cadastrados</li>
+            <li className="p-2 hover:bg-gray-700 cursor-pointer" onClick={() => navigate('/cadastrados')}>Lista de cadastrados</li>
             <li className="p-2 hover:bg-gray-700 cursor-pointer" onClick={() => navigate('/cadastroTEA')}>Fazer cadastro</li>
           </ul>
         </div>
@@ -83,7 +84,7 @@ const Dashboard: React.FC = () => {
             />
             <Button
               onClick={handleSearch}
-              className="bg-blue-500 hover:bg-orange-400 text-white font-bold py-2 px-4 ml-1 rounded focus:outline-none focus:shadow-outline"
+              className=" hover:bg-orange-400 text-white font-bold py-2 px-4 ml-1 rounded focus:outline-none focus:shadow-outline"
             >
               <FaSearch />
             </Button>
@@ -103,6 +104,8 @@ const Dashboard: React.FC = () => {
           )}
         </div>
       </div>
+
+      <Notification/>
     </div>
   );
 };

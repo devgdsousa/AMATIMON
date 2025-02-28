@@ -88,8 +88,8 @@ const CadastroTEAForm: React.FC = () => {
   
   return (
     <div className="min-h-screen flex flex-col justify-center items-center p-6 backdrop-blur-md  bg-[#D1D0BC]">
-      <div className="bg-[#dcd4cc] shadow-md rounded-lg px-8 pt-6 pb-8 mb-4 w-full max-w-2xl">
-        <img src={logo} alt="Logo" className="mx-auto mb-6" />
+      <div className="bg-[#dcd4cc] shadow-md rounded-lg px-8 pt-6 pb-8 mb-4 w-full max-w-6xl ">
+        <img src={logo} alt="Logo" className="mx-auto mb-6 max-w-2xl" />
         <h2 className="text-2xl font-bold mb-6 text-center">Realize o cadastro inserindo os dados abaixo:</h2>
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Dados Pessoais */}

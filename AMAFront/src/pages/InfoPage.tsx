@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { getCadastroById } from '../utils/axios';
+import { useParams, useNavigate } from 'react-router-dom';
+import { getCadastroById, deleteCadastroById } from '../utils/axios';
 import { Button } from '../components/UI';
-
 
 interface Cadastro {
   id: number;
@@ -36,9 +35,12 @@ interface Cadastro {
 
 const InfoPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
   const [dadosCadastrados, setDadosCadastrados] = useState<Cadastro | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>('');
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState<boolean>(false);
+  const [isConfirmedDelete, setIsConfirmedDelete] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchCadastro = async () => {
@@ -58,13 +60,26 @@ const InfoPage: React.FC = () => {
   }, [id]);
 
   const handleAtualizarCadastro = () => {
-    // Implementar a lógica para atualizar o cadastro
-    alert("Atualizar Cadastro");
+    navigate(`/cadastroTEA`); // Redireciona para a página de atualização com os dados preenchidos
   };
 
-  const handleRemoverCadastro = () => {
-    // Implementar a lógica para remover o cadastro
-    alert("Remover Cadastro");
+  const handleRemoverCadastro = async () => {
+    if (isConfirmedDelete) {
+      try {
+        await deleteCadastroById(Number(id)); // Chama a função para deletar o cadastro
+        navigate('//cadastrados'); // Redireciona para a lista de cadastros após a remoção
+      } catch (err) {
+        console.error('Erro ao remover cadastro:', err);
+        setError('Erro ao remover cadastro.');
+      }
+    } else {
+      setShowDeleteConfirmation(true);
+    }
+  };
+
+  const handleCancelDelete = () => {
+    setShowDeleteConfirmation(false); // Fecha a confirmação de exclusão
+    setIsConfirmedDelete(false); // Reseta a confirmação
   };
 
   if (loading) {
@@ -87,15 +102,15 @@ const InfoPage: React.FC = () => {
     <div className="min-h-screen flex flex-col justify-center items-center bg-[#D1D0BC] p-6 backdrop-blur-md">
       <div className="bg-[#dcd4cc] rounded-lg px-8 pt-6 pb-8 mb-4 w-full max-w-2xl shadow-lg backdrop-blur-md">
         {dadosCadastrados.foto ? (
-            <img 
-              rel="preload"
-              src={dadosCadastrados.foto} 
-              alt=""  // Remover o nome
-              className="mx-auto mb-6 rounded-full w-32 h-32 object-cover" // Estilo de avatar
-            />
-            ) : (
-            <div className="mx-auto mb-6 text-center text-gray-600">Sem Foto</div>
-              )}
+          <img 
+            rel="preload"
+            src={`http://localhost:3333/${dadosCadastrados.foto}`} 
+            alt=""  // Remover o nome         
+            className="mx-auto mb-6 rounded-full w-32 h-32 object-cover" // Estilo de avatar
+          />
+        ) : (
+          <div className="mx-auto mb-6 text-center text-gray-600">Sem Foto</div>
+        )}
         <h2 className="text-2xl font-bold mb-6 text-center">Informações do Cadastro</h2>
 
         <div className="grid grid-cols-2 gap-6 mb-6">
@@ -124,9 +139,7 @@ const InfoPage: React.FC = () => {
             <p><strong>Nome da Instituição:</strong> {dadosCadastrados.instituicaoEnsino}</p>
             <p><strong>Endereço:</strong> {dadosCadastrados.enderecoEscola}</p>
             <p><strong>Nível de Escolaridade:</strong> {dadosCadastrados.nivelEscolaridade}</p>
-            <p>
-              <strong>Acompanhamento Especializado:</strong> {dadosCadastrados.acompanhamentoEspecializado}
-            </p>
+            <p><strong>Acompanhamento Especializado:</strong> {dadosCadastrados.acompanhamentoEspecializado}</p>
           </div>
 
           {/* Dados Financeiros */}
@@ -155,6 +168,34 @@ const InfoPage: React.FC = () => {
             Remover Cadastro
           </Button>
         </div>
+
+        {/* Confirmação de exclusão */}
+        {showDeleteConfirmation && (
+          <div className="mt-4 flex flex-col items-center">
+            <label className="text-xl mb-2">Tem certeza que deseja excluir este cadastro?</label>
+            <input 
+              type="checkbox" 
+              checked={isConfirmedDelete}
+              onChange={(e) => setIsConfirmedDelete(e.target.checked)}
+              className="mb-4"
+            />
+            <span className="text-sm">Marque a caixa para confirmar.</span>
+            <div className="mt-4 flex gap-4">
+              <Button
+                onClick={handleRemoverCadastro}
+                className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+              >
+                Confirmar Exclusão
+              </Button>
+              <Button
+                onClick={handleCancelDelete}
+                className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+              >
+                Cancelar
+              </Button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

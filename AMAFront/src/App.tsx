@@ -4,6 +4,7 @@ import { AuthProvider } from './context/AuthContext';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import CadastroTEAForm from './pages/CadastroTEAForm';
+import ListPage from './pages/ListCadastro';
 import ProtectedRoute from './components/ProtectedRoute';
 import PublicRoute from './components/PublicRoute';
 import InfoPage from './pages/InfoPage';
@@ -45,9 +46,15 @@ const App: React.FC = () => {
               </ProtectedRoute>
             }
           />
-
-          {/* Rota padrão redireciona para Login */}
-          <Route path="*" element={<PublicRoute element={<Login />} />} />
+          <Route
+            path="/cadastrados"
+            element={
+              <ProtectedRoute>
+                <ListPage />
+              </ProtectedRoute>
+            }
+          />
+        <Route path="*" element={<PublicRoute element={<Login />} />} />
         </Routes>
       </Router>
     </AuthProvider>
