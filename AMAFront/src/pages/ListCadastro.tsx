@@ -4,6 +4,7 @@ import Navbar  from '../components/UI/Navbar/Navbar';
 import { FaSearch } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import { getAllCadastros } from '../utils/axios';
+import { FaTimes } from 'react-icons/fa';
 
 interface Cadastro {
   id: number;
@@ -17,6 +18,7 @@ const ListPage: React.FC = () => {
   const [error, setError] = useState<string>('');
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredCadastros, setFilteredCadastros] = useState<Cadastro[]>([]);
+   const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
   
   useEffect(() => {
@@ -91,7 +93,19 @@ const ListPage: React.FC = () => {
   <section className=' bg-[#D1D0BC] '>
     <Navbar />
     <div className="min-h-screen flex flex-col justify-center items-center bg-[#D1D0BC] p-6 backdrop-blur-md">
-    
+       {menuOpen && (
+                       <div className="fixed top-0 right-0 w-64 h-full bg-gray-800 shadow-lg p-4 text-white z-50">
+                         <button onClick={() => setMenuOpen(false)} className="text-white text-2xl mb-4">
+                           <FaTimes />
+                         </button>
+                         <ul>
+                           <li className="p-2 hover:bg-gray-700 cursor-pointer" onClick={() => navigate('/dashboard')}>Inicio</li>
+                           <li className="p-2 hover:bg-gray-700 cursor-pointer" onClick={() => navigate('/cadastrados')}>Lista de cadastrados</li>
+                           <li className="p-2 hover:bg-gray-700 cursor-pointer" onClick={() => navigate('/cadastroTEA')}>Fazer cadastro</li>
+                           <li className="p-2 hover:bg-gray-700 cursor-pointer" onClick={() => navigate('/dateRelatorio')}>Relatorio Cadastros</li>
+                         </ul>
+                       </div>
+                     )}
       <div className="bg-[#dcd4cc] rounded-lg px-8 pt-6 pb-8 mb-4 w-full max-w-2xl shadow-lg backdrop-blur-md">
        <div className="bg-transparent rounded w-full max-w-2xl relative">
           <div className="flex items-center mb-4">

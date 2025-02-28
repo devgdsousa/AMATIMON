@@ -61,4 +61,18 @@ export const deleteCadastroById = async (id: number) => {
   }
 };
 
+export const updateCadastroById = async (id: number, data: any) => {
+  try {
+    const response = await axios.patch(`http://localhost:3333/cadastro/${id}`, data, {
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('token')}`, // Verifique o token no localStorage
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Erro ao atualizar cadastro:', error);
+    throw new Error('Erro ao atualizar cadastro');
+  }
+};
+
 export default api;

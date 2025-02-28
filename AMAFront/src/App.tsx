@@ -8,6 +8,8 @@ import ListPage from './pages/ListCadastro';
 import ProtectedRoute from './components/ProtectedRoute';
 import PublicRoute from './components/PublicRoute';
 import InfoPage from './pages/InfoPage';
+import RelatorioPage from './pages/RelatorioData';
+import UpdateCadastro from './pages/UpdateCadastro';
 
 const App: React.FC = () => {
   return (
@@ -51,6 +53,22 @@ const App: React.FC = () => {
             element={
               <ProtectedRoute>
                 <ListPage />
+              </ProtectedRoute>
+            }
+          />
+           <Route
+            path="/dateRelatorio"
+            element={
+              <ProtectedRoute>
+                 <RelatorioPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/cadastroTEA/:id"
+            element={
+              <ProtectedRoute>
+                 <UpdateCadastro />
               </ProtectedRoute>
             }
           />

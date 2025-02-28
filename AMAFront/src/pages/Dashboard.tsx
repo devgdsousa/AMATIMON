@@ -66,8 +66,10 @@ const Dashboard: React.FC = () => {
             <FaTimes />
           </button>
           <ul>
+            <li className="p-2 hover:bg-gray-700 cursor-pointer" onClick={() => navigate('/dashboard')}>Inicio</li>
             <li className="p-2 hover:bg-gray-700 cursor-pointer" onClick={() => navigate('/cadastrados')}>Lista de cadastrados</li>
             <li className="p-2 hover:bg-gray-700 cursor-pointer" onClick={() => navigate('/cadastroTEA')}>Fazer cadastro</li>
+            <li className="p-2 hover:bg-gray-700 cursor-pointer" onClick={() => navigate('/dateRelatorio')}>Relatorio Cadastros</li>
           </ul>
         </div>
       )}

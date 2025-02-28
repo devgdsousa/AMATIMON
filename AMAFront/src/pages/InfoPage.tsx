@@ -60,14 +60,22 @@ const InfoPage: React.FC = () => {
   }, [id]);
 
   const handleAtualizarCadastro = () => {
-    navigate(`/cadastroTEA`); // Redireciona para a página de atualização com os dados preenchidos
-  };
+    
+      const token = localStorage.getItem('token');
+      if (token) {
+        // Se o usuário estiver autenticado, navegue para a página de atualização
+        navigate(`/cadastroTEA/${id}`);
+      } else {
+        // Se não estiver autenticado, redirecione para o login
+        navigate('/login');
+      }
+    };
 
   const handleRemoverCadastro = async () => {
     if (isConfirmedDelete) {
       try {
         await deleteCadastroById(Number(id)); // Chama a função para deletar o cadastro
-        navigate('//cadastrados'); // Redireciona para a lista de cadastros após a remoção
+        navigate('/cadastrados'); // Redireciona para a lista de cadastros após a remoção
       } catch (err) {
         console.error('Erro ao remover cadastro:', err);
         setError('Erro ao remover cadastro.');

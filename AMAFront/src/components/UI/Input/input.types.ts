@@ -43,7 +43,7 @@ export interface InputOptions
    * @default "text"
    * @type string
    */
-  type?: "text" | "password" | "email" | "number" | "tel" | "url" | "file";
+  type?: "text" | "password" | "email" | "number" | "tel" | "url" | "file" | "date";
 
   /**
    * Input error text

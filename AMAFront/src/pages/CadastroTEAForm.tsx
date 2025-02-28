@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import logo from '../assets/logo.png';
 import { Button } from '../components/UI';
 
+
 const CadastroTEAForm: React.FC = () => {
   const [formData, setFormData] = useState({
     nome: '',
